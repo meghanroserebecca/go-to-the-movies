@@ -10,41 +10,39 @@ ReactDOM.render(
 function films() {
   return fetch('http://www.omdbapi.com/?s=Indiana+Jones&plot=short&r=json')
     .then(res => res.json())
-    .then(movies => {
-      App(movies.Search);
+    .then(res => {
+      const movies = res.Search;
+      ReactDOM.render(
+      <App movies={movies}/>,
+      document.getElementById('root')
+      );
     });
 }
 
-function Indiana(props) {
+/*function Indiana(props) {
   return (
     <p>
-      Indiana Jones: {props.film.title}
+      Indiana Jones: {props.movies.indie}
     </p>
   );
-}
+}*/
 
-function App(filmsArray) {
-  console.log('FILMS', filmsArray);
-  const indie = filmsArray.map(film => (
-    <Indiana
-        key={film.imdbID}
+function App(props) {
+  console.log('FILMS', props.movies);
+  const indie = props.movies.map(film => {
+    return (
+    <li key={film.imdbID}>
         title={film.Title}
-        poster={film.Poster}
-        type={film.Type}
         year={film.Year}
-    />
-  ));
-  console.log(indie.key);
+    </li>
+    );
+  });
   return (
     <div>
       <h1>The Best Action Flicks Ever</h1>
-      {indie}
+      <ol>{indie}</ol>
     </div>
   );
 }
 
-
-ReactDOM.render(
-  <App/>,
-  document.getElementById('root')
-);
+films();
